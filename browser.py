@@ -37,7 +37,11 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 # write your code here
 while True:
     text = input()
-    if text == 'bloomberg.com':
+    dots = [pos for pos, char in enumerate(text) if char == '.']
+    end_dot_index = dots[-1]
+    if len(dots) == 0:
+        print("This URL contains an error")
+    elif text == 'bloomberg.com':
         print(bloomberg_com)
     elif text == 'nytimes.com':
         print(nytimes_com)
