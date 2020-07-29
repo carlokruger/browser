@@ -36,6 +36,7 @@ Twitter and Square Chief Executive Officer Jack Dorsey
  Tuesday, a signal of the strong ties between the Silicon Valley giants.
 '''
 
+tabs = []
 # write your code here
 while True:
     text = input()
@@ -68,19 +69,28 @@ while True:
         else:
             print("Error: File does not exist")
 
-    elif len(dots) == 0:
-        print("This URL contains an error")
-
     elif text == 'bloomberg.com':
         print(bloomberg_com)
+        tabs.append(bloomberg_com)
         with open(direc + '/bloomberg.txt', 'w') as b:
             b.write(bloomberg_com)
 
     elif text == 'nytimes.com':
         print(nytimes_com)
+        tabs.append(nytimes_com)
         with open(direc + '/nytimes.txt', 'w') as n:
             n.write(nytimes_com)
 
+    elif text == 'back':
+        if len(tabs) > 1:
+            tabs.pop()
+            print(tabs.pop())
+        else:
+            print("Error: No websites visited")
+
     elif text != 'bloomberg.com' and text != 'nytimes.com':
         print("Error: URL does not exist")
+
+    elif len(dots) == 0 and text != "back" and text != "exit":
+        print("This URL contains an error")
 
