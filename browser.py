@@ -1,3 +1,5 @@
+import os
+import sys
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -38,12 +40,47 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 while True:
     text = input()
     dots = [pos for pos, char in enumerate(text) if char == '.']
-    end_dot_index = dots[-1]
-    if len(dots) == 0:
+    if len(dots) > 0:
+        end_dot_index = dots[-1]
+
+    args = sys.argv
+    direc = args[1]
+
+    if not os.path.exists(direc):
+        os.mkdir(direc)
+    else:
+        pass
+
+    if text == 'exit':
+        break
+
+    elif text == 'bloomberg':
+        if os.path.isfile(direc + '/bloomberg.txt'):
+            with open(direc + "/bloomberg.txt", "r") as bloom:
+                print(bloom.read())
+        else:
+            print("Error: File does not exist")
+
+    elif text == 'nytimes':
+        if os.path.isfile(direc + '/nytimes.txt'):
+            with open(direc + "/nytimes.txt", "r") as ny:
+                print(ny.read())
+        else:
+            print("Error: File does not exist")
+
+    elif len(dots) == 0:
         print("This URL contains an error")
+
     elif text == 'bloomberg.com':
         print(bloomberg_com)
+        with open(direc + '/bloomberg.txt', 'w') as b:
+            b.write(bloomberg_com)
+
     elif text == 'nytimes.com':
         print(nytimes_com)
-    elif text == 'exit':
-        break
+        with open(direc + '/nytimes.txt', 'w') as n:
+            n.write(nytimes_com)
+
+    elif text != 'bloomberg.com' and text != 'nytimes.com':
+        print("Error: URL does not exist")
+
