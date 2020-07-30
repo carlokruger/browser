@@ -1,5 +1,6 @@
 import os
 import sys
+import requests
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -43,43 +44,21 @@ while True:
     dots = [pos for pos, char in enumerate(text) if char == '.']
     if len(dots) > 0:
         end_dot_index = dots[-1]
+        filename = text[:end_dot_index]
 
     args = sys.argv
-    direc = args[1]
+    directory = args[1]
 
-    if not os.path.exists(direc):
-        os.mkdir(direc)
+    if not os.path.exists(directory):
+        os.mkdir(directory)
     else:
         pass
 
-    if text == 'exit':
-        break
+    if text[:8].lower() != "https://" and text != "exit" and text != "back":
+        text = "https://" + text
 
-    elif text == 'bloomberg':
-        if os.path.isfile(direc + '/bloomberg.txt'):
-            with open(direc + "/bloomberg.txt", "r") as bloom:
-                print(bloom.read())
-        else:
-            print("Error: File does not exist")
-
-    elif text == 'nytimes':
-        if os.path.isfile(direc + '/nytimes.txt'):
-            with open(direc + "/nytimes.txt", "r") as ny:
-                print(ny.read())
-        else:
-            print("Error: File does not exist")
-
-    elif text == 'bloomberg.com':
-        print(bloomberg_com)
-        tabs.append(bloomberg_com)
-        with open(direc + '/bloomberg.txt', 'w') as b:
-            b.write(bloomberg_com)
-
-    elif text == 'nytimes.com':
-        print(nytimes_com)
-        tabs.append(nytimes_com)
-        with open(direc + '/nytimes.txt', 'w') as n:
-            n.write(nytimes_com)
+    if len(dots) == 0 and text != "back" and text != "exit":
+        print("This URL contains an error")
 
     elif text == 'back':
         if len(tabs) > 1:
@@ -88,9 +67,11 @@ while True:
         else:
             print("Error: No websites visited")
 
-    elif text != 'bloomberg.com' and text != 'nytimes.com':
-        print("Error: URL does not exist")
-
-    elif len(dots) == 0 and text != "back" and text != "exit":
-        print("This URL contains an error")
-
+    elif text == 'exit':
+        break
+    else:
+        site = requests.get(text)
+        print(site.text)
+        tabs.append(site.text)
+        with open(directory + "/" + filename + ".txt", 'w') as f:
+            f.write(str(site.text))
