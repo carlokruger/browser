@@ -1,8 +1,10 @@
 import os
 import sys
 import requests
+from bs4 import BeautifulSoup
 
 tabs = []
+tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'ul', 'li', 'head', 'title', "div"]
 # write your code here
 while True:
     text = input()
@@ -34,9 +36,16 @@ while True:
 
     elif text == 'exit':
         break
+
     else:
         site = requests.get(text)
-        print(site.text)
-        tabs.append(site.text)
+        soup = BeautifulSoup(site.text, 'html.parser')
+        page = soup.find_all(tags)
+        tabs.append(page)
         with open(directory + "/" + filename + ".txt", 'w') as f:
-            f.write(str(site.text))
+            for tag in page:
+                if tag.string is None:
+                    pass
+                else:
+                    print(tag.string)
+                    f.write(tag.string + '\n')
