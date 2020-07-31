@@ -2,6 +2,7 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup
+import colorama
 
 tabs = []
 tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'ul', 'li', 'head', 'title', "div"]
@@ -46,6 +47,10 @@ while True:
             for tag in page:
                 if tag.string is None:
                     pass
+                elif tag.name == "a":
+                    print(colorama.Fore.BLUE + tag.string)
+                    print(colorama.Style.RESET_ALL)
+                    f.write(tag.string + '\n')
                 else:
                     print(tag.string)
                     f.write(tag.string + '\n')
